@@ -1,0 +1,116 @@
+body {
+    background-color: black;
+}
+
+.App {
+    margin: 100px auto;
+    width: 725px;
+    display: flex;
+}
+
+.count_block,
+.counter,
+.button_block,
+.tuner_block,
+.tuner,
+button {
+    border-radius: 7px;
+}
+
+button,
+.button_block,
+.count_block {
+    border: 2px solid #7ce5ff;
+}
+
+.count_block {
+    padding: 15px;
+
+    width: 300px;
+
+    background-color: transparent;
+}
+
+.button_block {
+    height: 50px;
+
+    display: flex;
+    justify-content: space-around;
+}
+
+button {
+    margin: 10px;
+
+    width: 90px;
+
+    background-color: #7ce5ff;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+.tuner_block {
+    margin-right: 25px;
+    padding: 15px;
+
+    width: 400px;
+
+    border: 2px solid #7ce5ff;
+}
+
+.tuner {
+    padding: 10px;
+    margin-bottom: 15px;
+
+    height: 76px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    border: 2px solid #7ce5ff;
+
+    color: #7ce5ff;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+
+.input {
+    padding: 5px 0 5px 10px;
+
+    border: 2px solid #7ce5ff;
+    border-radius: 7px;
+    background-color: black;
+
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    outline:none;
+}
+
+.error {
+    padding: 5px 0 5px 10px;
+
+    border: 2px solid red;
+    border-radius: 7px;
+    background-color: black;
+
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    outline:none;
+
+}
+
+
+.error:focus {
+    border: 2px solid red;
+}
+
+
+
+
+
+
+

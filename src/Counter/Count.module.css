@@ -1,0 +1,26 @@
+.counter {
+    margin-bottom: 15px;
+
+    height: 100px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #7ce5ff;
+    text-align: center;
+}
+
+.counter div {
+    margin: 0;
+
+    color: black;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+
+.red_number p {
+    color: red;
+    font-size: 40px;
+}
