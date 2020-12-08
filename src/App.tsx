@@ -3,23 +3,11 @@ import s from './App.module.css';
 import {Counter} from "./Counter/Counter";
 import Button from "./Button/Button";
 import {TunerOfCounter} from "./TunerOfCounter/TunerOfCounter";
+import {restoreState, saveState} from "./localStorage/localStorage";
 
-
-const saveState = (maxNumber: number | string, startNumber: number | string) => {
-    let obj = {
-        'max': maxNumber,
-        'min': startNumber
-    }
-    localStorage.setItem('counter', JSON.stringify(obj));
-}
-
-const restoreState = () => {
-    let obj = localStorage.getItem('counter')
-    return obj ? JSON.parse(obj) : {'max': null, 'min': null}
-}
 
 function App() {
-    //стейт для максимального и стартового числа
+    //стейт для максимального и стартового числа (достаем из localStorage)
     let [maxNumber, setMaxNumber] = useState<number | string>(restoreState().max)
     let [startNumber, setStartNumber] = useState<number | string>(restoreState().min)
 
@@ -104,6 +92,7 @@ function App() {
     function set() {
         setCount(startNumber)
         setDisabled(true)
+        //сохраняем в localStorage
         saveState(maxNumber, startNumber)
     }
 
