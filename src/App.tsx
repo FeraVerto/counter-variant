@@ -4,32 +4,56 @@ import {Counter} from "./Counter/Counter";
 import Button from "./Button/Button";
 import {TunerOfCounter} from "./TunerOfCounter/TunerOfCounter";
 
+
+const saveState = (maxNumber: number | string, startNumber: number | string) => {
+    let obj = {
+        'max': maxNumber,
+        'min': startNumber
+    }
+    localStorage.setItem('counter', JSON.stringify(obj));
+}
+
+const restoreState = () => {
+    let obj = localStorage.getItem('counter')
+    return obj ? JSON.parse(obj) : {'max': null, 'min': null}
+}
+
 function App() {
     //стейт для максимального и стартового числа
-    let [maxNumber, setMaxNumber] = useState<number | string>(0)
-    let [startNumber, setStartNumber] = useState<number | string>(0)
+    let [maxNumber, setMaxNumber] = useState<number | string>(restoreState().max)
+    let [startNumber, setStartNumber] = useState<number | string>(restoreState().min)
+
     //стейт для выведения ошибок в каждом инпуте по отдельности
     let [classMax, setClassMax] = useState<string>(`${s.input}`)
     let [classStart, setClassStart] = useState<string>(`${s.input}`)
+
     //стейт для числа, которое выводится в Counter
     let [count, setCount] = useState<number | string>("enter values and press 'set'")
-    //стейт для дизэйбла кнопки set при ошибке или после установки значений в maxNumber и startNumber
+
+    //стейт для дизэйбла кнопки set при ошибке или после установки
+    //значений в maxNumber и startNumber
     let [disabled, setDisabled] = useState<boolean>(false)
+
 
     let error = `${s.error}`
     let input = `${s.input}`
 
     //Функция для сравнения значения инпутов  max и start
     let compare = (max: string | number, start: string | number) => {
+
         if (max <= start || (max < 0 || start < 0)) {
             setCount('Incorrect value')
             if (max === start) {
+                //Для одновременного отображения error (border: red) в обоих инпутах
+                //при одинаковых значениях введенных в инпут + disabled  кнопки  set
                 setClassStart(error)
                 setClassMax(error)
                 setDisabled(true)
             }
         } else {
             setCount("enter values and press 'set'")
+            //Как только значения в input будут удовлетворять условиям
+            //присваиваем обычный класс input и раздизебливаем кнопку
             setClassStart(input)
             setClassMax(input)
             setDisabled(false)
@@ -40,8 +64,8 @@ function App() {
     //которая принимает значение из инпута и отдает для сравнения compare
     let compareMax = (value: string | number) => {
         compare(value, startNumber)
-        //Валидация для инпута "max value..."
-        if(value < 0 || value <= startNumber) {
+        //Отдельная валидация для инпута "max value..."
+        if (value < 0 || value <= startNumber) {
             setClassMax(error)
             setDisabled(true)
         } else {
@@ -52,8 +76,8 @@ function App() {
 
     let compareStart = (value: string | number) => {
         compare(maxNumber, value)
-        //Валидация для инпута "start value..."
-        if(value < 0 || value >= maxNumber) {
+        //Отдельная валидация для инпута "start value..."
+        if (value < 0 || value >= maxNumber) {
             setClassStart(error)
             setDisabled(true)
         } else {
@@ -76,10 +100,11 @@ function App() {
         }
     }
 
-//устанавливаем стартовое значение в counter
+//устанавливаем стартовое значение в counter и раздизэбливаем кнопку set
     function set() {
         setCount(startNumber)
         setDisabled(true)
+        saveState(maxNumber, startNumber)
     }
 
     return (
@@ -90,17 +115,21 @@ function App() {
                 <div className={s.tuner}>
 
                     <TunerOfCounter
+                        value={maxNumber}
                         title={"max value:"}
                         setNumber={setMaxNumber}
                         compareNumbers={compareMax}
                         classNameInput={classMax}
+                        /*restore={restore}*/
                     />
 
                     <TunerOfCounter
+                        value={startNumber}
                         title={"start value:"}
                         setNumber={setStartNumber}
                         compareNumbers={compareStart}
                         classNameInput={classStart}
+                        /*restore={restore}*/
                     />
 
                 </div>
@@ -114,8 +143,8 @@ function App() {
             <div className={s.count_block}>
                 <Counter count={count} maxNumber={maxNumber} startNumber={startNumber}/>
                 <div className={s.button_block}>
-                    <Button onClick={increment} title={"inc"} disabled={count === maxNumber}/>
-                    <Button onClick={reset} title={"reset"} disabled={count === startNumber}/>
+                    <Button onClick={increment} title={"inc"} disabled={count === maxNumber || maxNumber === null}/>
+                    <Button onClick={reset} title={"reset"} disabled={count === startNumber || startNumber === null}/>
                 </div>
             </div>
 
@@ -124,3 +153,4 @@ function App() {
 }
 
 export default App;
+

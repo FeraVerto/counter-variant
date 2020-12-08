@@ -1,5 +1,4 @@
 import React, {ChangeEvent} from 'react'
-/*import './../App.module.css'*/
 import s from "./TunerOfCounter.module.css"
 
 export type TunerOfCounter = {
@@ -7,14 +6,18 @@ export type TunerOfCounter = {
     setNumber: (number: number | string) => void
     compareNumbers: (value: number | string) => void
     classNameInput: string
+    value: number | string
 }
 
-export function TunerOfCounter({compareNumbers, title, classNameInput, setNumber}: TunerOfCounter) {
+export function TunerOfCounter({value, compareNumbers, title, classNameInput, setNumber}: TunerOfCounter) {
 
+    //Срабатывает при изменениях в инпуте
     let onChangeInputTuner = (e: ChangeEvent<HTMLInputElement>) => {
+        //достает введенное значение
         let inputValue = Number(e.currentTarget.value)
+        //и устанавливает его в max или start
         setNumber(inputValue)
-        //отправляет inputValue в compareMax или в compareStart
+        // а так же отправляет его в compareMax или в compareStart
         compareNumbers(inputValue)
     }
 
@@ -24,6 +27,7 @@ export function TunerOfCounter({compareNumbers, title, classNameInput, setNumber
                 {title}
             </label>
             <input
+                value={value}
                 className={classNameInput}
                 id="1"
                 type="number"
