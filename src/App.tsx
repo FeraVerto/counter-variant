@@ -13,7 +13,6 @@ import {counter, tuner} from "./redux/selectors";
 
 function App() {
 
-
     let countState = useSelector(counter)
     let tunerState = useSelector(tuner)
     let dispatch = useDispatch()
@@ -26,6 +25,9 @@ function App() {
     let input = `${s.input}`
 
     //Функция для сравнения значения инпутов  max и start
+    //max: string | number, start: string | number
+    //compares two numbers
+    //return void ?
     let compare = (max: string | number, start: string | number) => {
 
         if (max <= start || (max < 0 || start < 0)) {

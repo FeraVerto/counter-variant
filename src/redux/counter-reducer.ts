@@ -1,10 +1,10 @@
 
-type initialStateType = {
+export type initialStateType = {
     count: number | string
     disabled: boolean
 }
 
-let initialState: initialStateType = {
+export let initialState: initialStateType = {
     count: "enter values and press 'set'",
     disabled: false
 }
