@@ -1,5 +1,7 @@
 import React, {ChangeEvent} from 'react'
 import s from "./TunerOfCounter.module.css"
+import {useDispatch} from "react-redux";
+import {log} from "util";
 
 export type TunerOfCounter = {
     title: string
@@ -9,18 +11,20 @@ export type TunerOfCounter = {
     value: number | string
 }
 
-export function TunerOfCounter({value, compareNumbers, title, classNameInput, setNumber}: TunerOfCounter) {
-
+export function TunerOfCounter({value, setNumber, title, classNameInput, compareNumbers}: TunerOfCounter) {
+    let dispatch = useDispatch()
     //Срабатывает при изменениях в инпуте
     let onChangeInputTuner = (e: ChangeEvent<HTMLInputElement>) => {
         //достает введенное значение
         let inputValue = Number(e.currentTarget.value)
         //и устанавливает его в max или start
-        setNumber(inputValue)
+        dispatch(setNumber(inputValue || ""))
         // а так же отправляет его в compareMax или в compareStart
         compareNumbers(inputValue)
+
     }
 
+    console.log(value)
     return (
         <div className={s.tuner_item}>
             <label htmlFor="1">

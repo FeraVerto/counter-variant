@@ -8,5 +8,5 @@ export const saveState = (maxNumber: number | string, startNumber: number | stri
 
 export const restoreState = () => {
     let obj = localStorage.getItem('counter')
-    return obj ? JSON.parse(obj) : {'max': null, 'min': null}
+    return obj ? JSON.parse(obj) : {'max': "", 'min': ""}
 }

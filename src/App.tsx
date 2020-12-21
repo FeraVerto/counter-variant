@@ -3,25 +3,24 @@ import s from './App.module.css';
 import {Counter} from "./Counter/Counter";
 import Button from "./Button/Button";
 import {TunerOfCounter} from "./TunerOfCounter/TunerOfCounter";
-import {restoreState, saveState} from "./localStorage/localStorage";
+import {saveState} from "./localStorage/localStorage";
+
+import {countAC, setDisabledAC} from "./redux/counter-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {setMaxNumberAC, setStartNumberAC} from "./redux/tuner-of-counter-reducer";
+import {counter, tuner} from "./redux/selectors";
 
 
 function App() {
-    //стейт для максимального и стартового числа (достаем из localStorage)
-    let [maxNumber, setMaxNumber] = useState<number | string>(restoreState().max)
-    let [startNumber, setStartNumber] = useState<number | string>(restoreState().min)
+
+
+    let countState = useSelector(counter)
+    let tunerState = useSelector(tuner)
+    let dispatch = useDispatch()
 
     //стейт для выведения ошибок в каждом инпуте по отдельности
     let [classMax, setClassMax] = useState<string>(`${s.input}`)
     let [classStart, setClassStart] = useState<string>(`${s.input}`)
-
-    //стейт для числа, которое выводится в Counter
-    let [count, setCount] = useState<number | string>("enter values and press 'set'")
-
-    //стейт для дизэйбла кнопки set при ошибке или после установки
-    //значений в maxNumber и startNumber
-    let [disabled, setDisabled] = useState<boolean>(false)
-
 
     let error = `${s.error}`
     let input = `${s.input}`
@@ -30,71 +29,73 @@ function App() {
     let compare = (max: string | number, start: string | number) => {
 
         if (max <= start || (max < 0 || start < 0)) {
-            setCount('Incorrect value')
+            dispatch(countAC('Incorrect value'))
             if (max === start) {
                 //Для одновременного отображения error (border: red) в обоих инпутах
                 //при одинаковых значениях введенных в инпут + disabled  кнопки  set
                 setClassStart(error)
                 setClassMax(error)
-                setDisabled(true)
+                dispatch(setDisabledAC(true))
             }
         } else {
-            setCount("enter values and press 'set'")
+            //setCount("enter values and press 'set'")
+            dispatch(countAC("enter values and press 'set'"))
             //Как только значения в input будут удовлетворять условиям
             //присваиваем обычный класс input и раздизебливаем кнопку
             setClassStart(input)
             setClassMax(input)
-            setDisabled(false)
+            //setDisabled(false)
+            dispatch(setDisabledAC(false))
         }
     }
 
     //Функции compareMax и compareStart - обертка для функции compare,
     //которая принимает значение из инпута и отдает для сравнения compare
     let compareMax = (value: string | number) => {
-        compare(value, startNumber)
+        compare(value, tunerState.startNumber)
         //Отдельная валидация для инпута "max value..."
-        if (value < 0 || value <= startNumber) {
+        if (value < 0 || value <= tunerState.startNumber) {
             setClassMax(error)
-            setDisabled(true)
+            dispatch(setDisabledAC(true))
         } else {
             setClassMax(input)
-            setDisabled(false)
+            dispatch(setDisabledAC(false))
         }
     }
 
     let compareStart = (value: string | number) => {
-        compare(maxNumber, value)
+        compare(tunerState.maxNumber, value)
         //Отдельная валидация для инпута "start value..."
-        if (value < 0 || value >= maxNumber) {
+        if (value < 0 || value >= tunerState.maxNumber) {
             setClassStart(error)
-            setDisabled(true)
+            dispatch(setDisabledAC(true))
         } else {
             setClassStart(input)
-            setDisabled(false)
+            dispatch(setDisabledAC(false))
         }
     }
 
     function increment() {
-        if (count < maxNumber) {
-            //не изменяем state напрямую!
-            let newValue = Number(count) + 1
-            setCount(newValue)
+        if (countState.count < tunerState.maxNumber) {
+            let newValue = Number(countState.count) + 1
+            dispatch(countAC(newValue || ""))
         }
     }
 
     function reset() {
-        if (count > startNumber) {
-            setCount(startNumber)
+        if (countState.count > tunerState.startNumber) {
+            dispatch(countAC(tunerState.startNumber))
         }
     }
 
 //устанавливаем стартовое значение в counter и раздизэбливаем кнопку set
     function set() {
-        setCount(startNumber)
-        setDisabled(true)
+        dispatch(countAC(tunerState.startNumber))
+        dispatch(setDisabledAC(true))
         //сохраняем в localStorage
-        saveState(maxNumber, startNumber)
+        saveState(tunerState.maxNumber, tunerState.startNumber)
     }
+
 
     return (
 
@@ -104,36 +105,37 @@ function App() {
                 <div className={s.tuner}>
 
                     <TunerOfCounter
-                        value={maxNumber}
+                        value={tunerState.maxNumber}
                         title={"max value:"}
-                        setNumber={setMaxNumber}
+                        setNumber={setMaxNumberAC}
                         compareNumbers={compareMax}
                         classNameInput={classMax}
-                        /*restore={restore}*/
                     />
 
                     <TunerOfCounter
-                        value={startNumber}
+                        value={tunerState.startNumber}
                         title={"start value:"}
-                        setNumber={setStartNumber}
+                        setNumber={setStartNumberAC}
                         compareNumbers={compareStart}
                         classNameInput={classStart}
-                        /*restore={restore}*/
                     />
 
                 </div>
                 <div className={s.button_block}>
                     <Button onClick={set} title={"set"}
-                            disabled={disabled}
+                            disabled={countState.disabled}
                     />
                 </div>
             </div>
 
             <div className={s.count_block}>
-                <Counter count={count} maxNumber={maxNumber} startNumber={startNumber}/>
+                <Counter count={countState.count} maxNumber={tunerState.maxNumber}
+                         startNumber={tunerState.startNumber}/>
                 <div className={s.button_block}>
-                    <Button onClick={increment} title={"inc"} disabled={count === maxNumber || maxNumber === null}/>
-                    <Button onClick={reset} title={"reset"} disabled={count === startNumber || startNumber === null}/>
+                    <Button onClick={increment} title={"inc"}
+                            disabled={countState.count === tunerState.maxNumber || tunerState.maxNumber === null}/>
+                    <Button onClick={reset} title={"reset"}
+                            disabled={countState.count === tunerState.startNumber || tunerState.startNumber === null}/>
                 </div>
             </div>
 
