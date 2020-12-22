@@ -11,7 +11,7 @@ import {setMaxNumberAC, setStartNumberAC} from "./redux/tuner-of-counter-reducer
 import {counter, tuner} from "./redux/selectors";
 
 
-function App() {
+export const App = () => {
 
     let countState = useSelector(counter)
     let tunerState = useSelector(tuner)
@@ -24,11 +24,9 @@ function App() {
     let error = `${s.error}`
     let input = `${s.input}`
 
-    //Функция для сравнения значения инпутов  max и start
     //max: string | number, start: string | number
-    //compares two numbers
-    //return void ?
-    let compare = (max: string | number, start: string | number) => {
+    //compares two numbers, assigns a class, dispatch
+    const compare = (max: string | number, start: string | number) => {
 
         if (max <= start || (max < 0 || start < 0)) {
             dispatch(countAC('Incorrect value'))
@@ -40,19 +38,17 @@ function App() {
                 dispatch(setDisabledAC(true))
             }
         } else {
-            //setCount("enter values and press 'set'")
             dispatch(countAC("enter values and press 'set'"))
             //Как только значения в input будут удовлетворять условиям
             //присваиваем обычный класс input и раздизебливаем кнопку
             setClassStart(input)
             setClassMax(input)
-            //setDisabled(false)
             dispatch(setDisabledAC(false))
         }
     }
 
-    //Функции compareMax и compareStart - обертка для функции compare,
-    //которая принимает значение из инпута и отдает для сравнения compare
+    //value: string | number
+    //compares the resulting maxNumber with the startNumber from the state
     let compareMax = (value: string | number) => {
         compare(value, tunerState.startNumber)
         //Отдельная валидация для инпута "max value..."
@@ -65,6 +61,8 @@ function App() {
         }
     }
 
+    //value: string | number
+    //compares the resulting startNumber with the maxNumber from the state
     let compareStart = (value: string | number) => {
         compare(tunerState.maxNumber, value)
         //Отдельная валидация для инпута "start value..."
@@ -77,30 +75,35 @@ function App() {
         }
     }
 
+    //accepts nothing
+    //increases counter by 1
     function increment() {
-        if (countState.count < tunerState.maxNumber) {
+        if (countState.count < tunerState.startNumber) {
             let newValue = Number(countState.count) + 1
             dispatch(countAC(newValue || ""))
         }
     }
 
+    //accepts nothing
+    //reset to initialization value
     function reset() {
         if (countState.count > tunerState.startNumber) {
             dispatch(countAC(tunerState.startNumber))
         }
     }
 
-//устанавливаем стартовое значение в counter и раздизэбливаем кнопку set
+    //accepts nothing
+    //set initial value to count
+    //and save maxNumber, startNumber to localStorage
     function set() {
         dispatch(countAC(tunerState.startNumber))
         dispatch(setDisabledAC(true))
-        //сохраняем в localStorage
+
         saveState(tunerState.maxNumber, tunerState.startNumber)
     }
 
 
     return (
-
         <div className={s.App}>
 
             <div className={s.tuner_block}>
@@ -145,5 +148,4 @@ function App() {
     );
 }
 
-export default App;
 

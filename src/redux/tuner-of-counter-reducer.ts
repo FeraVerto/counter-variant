@@ -10,7 +10,7 @@ export type setStartNumberACType = {
     startNumber: number | string
 }
 
-type initialStateType = {
+export type initialStateType = {
     maxNumber: number | string
     startNumber: number | string
 }
@@ -35,10 +35,10 @@ export const tunerOfCounterReducer = (state: initialStateType = initialState, ac
     }
 }
 
-export const setMaxNumberAC = (maxNumber: number | string) => ({
+export const setMaxNumberAC = (maxNumber: number | string): setMaxNumberACType => ({
     type: "SET_MAX_NUMBER", maxNumber
 })
 
-export const setStartNumberAC = (startNumber: number | string) => ({
+export const setStartNumberAC = (startNumber: number | string): setStartNumberACType => ({
     type: "SET_START_NUMBER", startNumber
 })

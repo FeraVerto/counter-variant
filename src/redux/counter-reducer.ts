@@ -1,4 +1,3 @@
-
 export type initialStateType = {
     count: number | string
     disabled: boolean
@@ -11,7 +10,7 @@ export let initialState: initialStateType = {
 
 export type countActionType = {
     type: "SET_COUNT"
-    startNumber: number | string
+    startNumber: string | number
 }
 
 export type setDisabledACType = {
@@ -34,11 +33,11 @@ export const counterReducer = (state: initialStateType = initialState, action: A
     }
 }
 
-export const countAC = (startNumber: number | string) => ({
+export const countAC = (startNumber: number | string): countActionType => ({
     type: "SET_COUNT", startNumber
 })
 
-export const setDisabledAC = (disabled: boolean) => ({
+export const setDisabledAC = (disabled: boolean): setDisabledACType => ({
     type: "DISABLED", disabled
 })
 

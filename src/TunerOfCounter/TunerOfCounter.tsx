@@ -11,20 +11,18 @@ export type TunerOfCounter = {
     value: number | string
 }
 
-export function TunerOfCounter({value, setNumber, title, classNameInput, compareNumbers}: TunerOfCounter) {
+export const TunerOfCounter = ({value, setNumber, title, classNameInput, compareNumbers}: TunerOfCounter) => {
     let dispatch = useDispatch()
-    //Срабатывает при изменениях в инпуте
-    let onChangeInputTuner = (e: ChangeEvent<HTMLInputElement>) => {
-        //достает введенное значение
-        let inputValue = Number(e.currentTarget.value)
-        //и устанавливает его в max или start
-        dispatch(setNumber(inputValue || ""))
-        // а так же отправляет его в compareMax или в compareStart
-        compareNumbers(inputValue)
 
+    //e (event): ChangeEvent<HTMLInputElement>
+    //dispatch setNumber and passing a value to a compareNumbers for compare
+    let onChangeInputTuner = (e: ChangeEvent<HTMLInputElement>) => {
+        let inputValue = +e.currentTarget.value
+        dispatch(setNumber(inputValue || ""))
+
+        compareNumbers(inputValue)
     }
 
-    console.log(value)
     return (
         <div className={s.tuner_item}>
             <label htmlFor="1">
