@@ -1,3 +1,6 @@
+export enum ACTIONS_TYPE {
+    SET_COUNT = "Counter/SET_COUNT"
+}
 
 export type initialStateType = {
     count: number | string
@@ -8,25 +11,26 @@ export let initialState: initialStateType = {
 }
 
 export type countActionType = {
-    type: "SET_COUNT"
-    startNumber: string | number
+    type: ACTIONS_TYPE.SET_COUNT
+    payload: {
+        count: string | number
+    }
 }
 
 export type ActionType = countActionType
 
 export const counterReducer = (state: initialStateType = initialState, action: ActionType): initialStateType => {
     switch (action.type) {
-        case "SET_COUNT":
-            console.log(state.count)
-            return {...state, count: action.startNumber}
+        case ACTIONS_TYPE.SET_COUNT:
+            return {...state, ...action.payload}
 
         default:
             return state
     }
 }
 
-export const countAC = (startNumber: number | string): countActionType => ({
-    type: "SET_COUNT", startNumber
+export const countAC = (count: number | string): countActionType => ({
+    type: ACTIONS_TYPE.SET_COUNT, payload: {count}
 })
 
 
