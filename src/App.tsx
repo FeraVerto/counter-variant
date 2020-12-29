@@ -5,10 +5,11 @@ import Button from "./Button/Button";
 import {TunerOfCounter} from "./TunerOfCounter/TunerOfCounter";
 import {saveState} from "./localStorage/localStorage";
 
-import {countAC, setDisabledAC} from "./redux/counter-reducer";
+
 import {useDispatch, useSelector} from "react-redux";
-import {setMaxNumberAC, setStartNumberAC} from "./redux/tuner-of-counter-reducer";
+import {setDisabledAC, setMaxNumberAC, setStartNumberAC} from "./redux/tuner-of-counter-reducer";
 import {counter, tuner} from "./redux/selectors";
+import {countAC} from "./redux/counter-reducer";
 
 
 export const App = () => {
@@ -78,10 +79,8 @@ export const App = () => {
     //accepts nothing
     //increases counter by 1
     function increment() {
-        if (countState.count < tunerState.startNumber) {
-            let newValue = Number(countState.count) + 1
-            dispatch(countAC(newValue || ""))
-        }
+        let newValue = +countState.count + 1
+        dispatch(countAC(newValue || ""))
     }
 
     //accepts nothing
@@ -128,7 +127,7 @@ export const App = () => {
                 </div>
                 <div className={s.button_block}>
                     <Button onClick={set} title={"set"}
-                            disabled={countState.disabled}
+                            disabled={tunerState.disabled}
                     />
                 </div>
             </div>

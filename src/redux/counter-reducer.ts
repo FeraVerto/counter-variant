@@ -1,11 +1,10 @@
+
 export type initialStateType = {
     count: number | string
-    disabled: boolean
 }
 
 export let initialState: initialStateType = {
-    count: "enter values and press 'set'",
-    disabled: false
+    count: "enter values and press 'set'"
 }
 
 export type countActionType = {
@@ -13,20 +12,13 @@ export type countActionType = {
     startNumber: string | number
 }
 
-export type setDisabledACType = {
-    type: "DISABLED",
-    disabled: boolean
-}
-
-export type ActionType = countActionType | setDisabledACType
+export type ActionType = countActionType
 
 export const counterReducer = (state: initialStateType = initialState, action: ActionType): initialStateType => {
     switch (action.type) {
         case "SET_COUNT":
+            console.log(state.count)
             return {...state, count: action.startNumber}
-
-        case "DISABLED":
-            return {...state, disabled: action.disabled}
 
         default:
             return state
@@ -37,9 +29,6 @@ export const countAC = (startNumber: number | string): countActionType => ({
     type: "SET_COUNT", startNumber
 })
 
-export const setDisabledAC = (disabled: boolean): setDisabledACType => ({
-    type: "DISABLED", disabled
-})
 
 /*
 

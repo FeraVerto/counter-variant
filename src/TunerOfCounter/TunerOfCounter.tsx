@@ -13,7 +13,7 @@ export type TunerOfCounter = {
 
 export const TunerOfCounter = ({value, setNumber, title, classNameInput, compareNumbers}: TunerOfCounter) => {
     let dispatch = useDispatch()
-
+    console.log(classNameInput)
     //e (event): ChangeEvent<HTMLInputElement>
     //dispatch setNumber and passing a value to a compareNumbers for compare
     let onChangeInputTuner = (e: ChangeEvent<HTMLInputElement>) => {
